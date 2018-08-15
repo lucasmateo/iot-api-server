@@ -1,0 +1,6 @@
+---
+applications:
+ - name: IOT api occupancy
+   memory: 128M
+   command: python3 src/main.py
+   buildpack: python_buildpack
