@@ -9,6 +9,7 @@ super class of all request handler
 class RequestHandler(abc.ABC):
     parser = None
     db = None
+    resp = None
 
     def __init__(self):
         self.db = database.Database.getDatabase()
@@ -22,7 +23,12 @@ class RequestHandler(abc.ABC):
         response = flask.Response()
         response.mimetype = 'application/json'
         del response.headers['Server']
+        self.resp = response
         return response
 
     def setParser(self,parser):
         self.parser = parser
+
+    def setContent(self,content):
+        self.resp.data = content
+        self.resp.headers.add("Length",len(content))

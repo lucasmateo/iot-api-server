@@ -11,8 +11,8 @@ class DataRequestHandler(handler.RequestHandler):
         resp = super(DataRequestHandler, self).handle(request)
         try:
             data = self.db.getDataFromId(self.id)
-            resp.data = self.parser.dataResponse(data)
+            self.setContent(self.parser.dataResponse(data))
             return resp
         except KeyError:
-            resp.data = self.parser.unknownIdError()
+            self.setContent(self.parser.unknownIdError())
             return resp
