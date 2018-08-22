@@ -10,6 +10,9 @@ valueLabel = 'val'
 dataLabel='data'
 errorLable= 'error'
 commandLabel = "command"
+hour_frequency = "perHour"
+db_entry_state_label = "state"
+minutesInHour = 60
 
 COMMANDS = {
     "data" : [
