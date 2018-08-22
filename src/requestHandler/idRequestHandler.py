@@ -5,5 +5,5 @@ class IdRequestHandler(handler.RequestHandler):
     def handle(self, request):
         resp = super(IdRequestHandler, self).handle(request)
         id = self.db.createNewDevice()
-        resp.data = self.parser.idResponse(True,id)
+        self.setContent(self.parser.idResponse(True,id))
         return resp

@@ -7,5 +7,5 @@ class CommandListRequestHandler(handler.RequestHandler):
 
     def handle(self, request):
         resp = super(CommandListRequestHandler, self).handle(request)
-        resp.data = dumps(COMMANDS)
+        self.setContent(dumps(COMMANDS))
         return resp

@@ -11,7 +11,7 @@ class MeasureRequestHandler(handler.RequestHandler):
         try:
             lastUpdate = datetime.datetime.strptime(self.db.getIdLastUpdate(id),"%Y-%m-%d %H:%M:%S.%f")
         except KeyError:
-            resp.data = self.parser.unknownIdError()
+            self.setContent(self.parser.unknownIdError())
             return resp
 
         timeDelta = (datetime.datetime.now() - lastUpdate) / len(data)
@@ -25,7 +25,7 @@ class MeasureRequestHandler(handler.RequestHandler):
 
 
         commandList = self.db.getCommandList(id)
-        resp.data = self.parser.measureResponse(commandList)
+        self.setContent(self.parser.measureResponse(commandList))
         self.db.deleteCommands(id)
 
         self.db.computeOccupancy(1, 2, 2, id)

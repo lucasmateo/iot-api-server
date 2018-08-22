@@ -11,8 +11,8 @@ class DataRequestHandler(handler.RequestHandler):
         resp = super(DataRequestHandler, self).handle(request)
         try:
             data, perHour = self.db.getDataFromId(self.id)
-            resp.data = self.parser.dataResponse(data, perHour)
+            self.setContent(self.parser.dataResponse(data, perHour))
             return resp
         except KeyError:
-            resp.data = self.parser.unknownIdError()
+            self.setContent(self.parser.unknownIdError())
             return resp
