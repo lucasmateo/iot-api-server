@@ -45,6 +45,7 @@ class db:
         doc = self.db.create_document({self.dataLabel : []})
         doc[self.lastUpdateLabel] = str(datetime.datetime.now())
         doc[self.commandLabel] = []
+        doc[constant.hour_frequency] = []
         doc.save()
         return doc["_id"]
 
@@ -84,7 +85,7 @@ class db:
     def getDataFromId(self,id):
         doc = self.db[id]
 
-        return doc[self.dataLabel]
+        return (doc[self.dataLabel], doc[constant.hour_frequency])
 
     def getDeviceList(self):
         return self.db.keys(remote=True)
@@ -110,3 +111,29 @@ class db:
         doc = self.db[id]
         doc[self.commandLabel] = []
         doc.save()
+
+    def computeOccupancy(self, measurementFrequency, numGraphLabels, computedHours, deviceID):
+        doc = self.db[deviceID]
+        dataToCompute = doc[constant.dataLabel]
+        numEntriesToCompute = (constant.minutesInHour // measurementFrequency) * computedHours
+        lenPerLabel = numEntriesToCompute // numGraphLabels
+        print(numEntriesToCompute)
+        dataToCompute = dataToCompute[-numEntriesToCompute:]
+        frequencyPerLabel = []
+
+        def chunks(arr, n):
+            for i in range(0, len(arr), n):
+                yield arr[i:i + n]
+
+        dataPerLabel = list(chunks(dataToCompute, lenPerLabel))
+        print(dataPerLabel)
+
+        for label in range(numGraphLabels):
+            frequencyPerLabel.append(0)
+            for el in dataPerLabel[label]:
+                if el[constant.db_entry_state_label]:
+                    frequencyPerLabel[label] += 1
+        hours = doc[constant.hour_frequency] + frequencyPerLabel
+        doc[constant.hour_frequency] = hours
+        doc.save()
+

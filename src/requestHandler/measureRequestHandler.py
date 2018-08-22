@@ -22,7 +22,12 @@ class MeasureRequestHandler(handler.RequestHandler):
             dataArray.append((data[i],time))
 
         self.db.addDataArray(id,dataArray)
+
+
         commandList = self.db.getCommandList(id)
         resp.data = self.parser.measureResponse(commandList)
         self.db.deleteCommands(id)
+
+        self.db.computeOccupancy(1, 2, 2, id)
+
         return resp

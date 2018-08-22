@@ -10,8 +10,8 @@ class DataRequestHandler(handler.RequestHandler):
     def handle(self, request):
         resp = super(DataRequestHandler, self).handle(request)
         try:
-            data = self.db.getDataFromId(self.id)
-            resp.data = self.parser.dataResponse(data)
+            data, perHour = self.db.getDataFromId(self.id)
+            resp.data = self.parser.dataResponse(data, perHour)
             return resp
         except KeyError:
             resp.data = self.parser.unknownIdError()

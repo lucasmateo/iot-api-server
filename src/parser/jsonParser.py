@@ -36,10 +36,11 @@ class JsonParser:
         data[constant.commandLabel] = commandList
         return json.dumps(data)
 
-    def dataResponse(self,list):
+    def dataResponse(self, list, perHour):
         data = {}
         data[constant.statusLabel] = constant.statusOK
         data[constant.dataLabel] = list
+        data[constant.hour_frequency] = perHour
         return json.dumps(data)
 
     def listResponse(self,list):
